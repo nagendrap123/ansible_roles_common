@@ -14,10 +14,14 @@
     ansible.builtin.user:   #works for all distros
      name: expense
   - name: run app pre_requisites
+    tags:
+    - deployment
     ansible.builtin.import_role:
      name: common
      tasks_from: app_pre_requisites  
   - name: install the npm 
+    tags: 
+    - deployment
     ansible.builtin.command: npm install 
     args:
      chdir: /app 
@@ -45,10 +49,14 @@
      state: import
      name: all          
   - name: to restart the daemon-reload
+    tags: 
+    - deployment
     ansible.builtin.systemd_service:
      daemon_reload: true   
-  - name: to start and enable the service 
+  - name: to start and enable the service
+    tags: 
+    - deployment 
     ansible.builtin.service:
      name: backend 
-     state: started 
+     state: restarted 
      enabled: yes 
